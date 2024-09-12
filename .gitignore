@@ -1,0 +1,10 @@
+*.pyc
+.DS_Store
+.ruff_cache/
+__pycache__/
+/.vscode/
+build/
+dist/
+
+games/
+output/

@@ -1,0 +1,57 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[tool.poetry]
+authors = ["3Beans"]
+description = "Statistics generator for Satisfactory"
+name = "satisfactory-game-stats"
+readme = "README.md"
+version = "1.0.0"
+repository = "https://github.com/3-beans/satisfactory-game-stats"
+packages = [{ include = "ficsit" }]
+include = ["parse.py"]
+
+[tool.ruff]
+output-format = "grouped"
+line-length = 100
+target-version = "py312"
+extend-exclude = [".github"]
+
+[tool.ruff.lint]
+select = [
+    "B",   # bugbear: https://beta.ruff.rs/docs/rules/#flake8-bugbear-b
+    "E",   # errors: https://beta.ruff.rs/docs/rules/#error-e
+    "F",   # pyflakes: https://beta.ruff.rs/docs/rules/#pyflakes-f
+    "I",   # isort: https://beta.ruff.rs/docs/rules/#isort-i
+    "N",   # naming: https://beta.ruff.rs/docs/rules/#pep8-naming-n
+    "PL",  # pylint: https://beta.ruff.rs/docs/rules/#pylint-pl
+    "PTH", # pathlib: https://beta.ruff.rs/docs/rules/#flake8-use-pathlib-pth
+    "TCH", # typechecking: https://docs.astral.sh/ruff/rules/#flake8-type-checking-tch
+    "Q",   # quotes: https://beta.ruff.rs/docs/rules/#flake8-quotes-q
+    "T10", # debugger: https://beta.ruff.rs/docs/rules/#flake8-debugger-t10
+    "T20", # print: https://beta.ruff.rs/docs/rules/#flake8-print-t20
+    "W",   # warnings: https://beta.ruff.rs/docs/rules/#warning-w
+]
+ignore = [
+    "E501", # Line too long to avoid triggering on comments
+]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+docstring-code-line-length = 80
+
+[tool.poetry.dependencies]
+python = "~3.12"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.4"
