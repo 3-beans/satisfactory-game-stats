@@ -4,6 +4,8 @@ from pathlib import Path
 
 import satisfactory_save as s
 
+from ficsit.utils import calculate_belt_distance
+
 # Load a save game
 gamefile = Path("games/Crush Life_autosave_0.sav")
 save = s.SaveGame(gamefile)
@@ -15,6 +17,7 @@ found = defaultdict(int)
 objs = save.persistentAndRuntimeData().save_objects
 
 stats["total_objects"] = len(objs)
+total_distances = defaultdict(int)
 
 for obj in objs:
     if not obj.ClassName.startswith("/Game/FactoryGame/Buildable/Factory/"):
@@ -23,8 +26,8 @@ for obj in objs:
     class_name = "".join(obj.ClassName.split("/")[5])
     found[class_name] += 1
 
-    # if not class_name.startswith("ConveyorBeltMk"):
-    #     continue
+    if class_name.startswith("ConveyorBeltMk"):
+        total_distances[class_name] += calculate_belt_distance(obj)
 
     # if not hasattr(obj, "child_references"):
     #     continue
@@ -45,3 +48,9 @@ found_output = Path(found_file)
 found_output.parent.mkdir(parents=True, exist_ok=True)
 with found_output.open("wt") as f:
     json.dump(found, f, indent=4, sort_keys=True)
+
+distance_file = "output/belt-distances.json"
+distance_output = Path(distance_file)
+distance_output.parent.mkdir(parents=True, exist_ok=True)
+with distance_output.open("wt") as f:
+    json.dump(total_distances, f, indent=4, sort_keys=True)
