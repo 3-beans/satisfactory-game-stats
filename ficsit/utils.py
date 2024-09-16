@@ -1,5 +1,7 @@
 # ruff: noqa: T201
 
+from math import inf, sqrt
+
 import satisfactory_save as s
 
 
@@ -52,3 +54,36 @@ def print_object(obj: s.SaveObjectBase):
         print_property(p, 2)
     print(f"  Guid: {obj.Guid}")
     print(f"  ExtraProperties: {obj.ExtraProperties}")
+
+
+def calculate_belt_distance(obj: s.SaveObjectBase):
+    """
+    Calculates a basic distance (in 3d space) for a belt.
+
+    Does NOT take into account spline pathing yet, so the calculation is not very accurate.
+
+    Returns -inf if the passed object is not a conveyor belt, or the spline data property
+    can't be found.
+    """
+    class_name = "".join(obj.ClassName.split("/")[5])
+    if not class_name.startswith("ConveyorBeltMk"):
+        return -inf
+
+    for p in obj.Properties:
+        if p.Name.Name == "mSplineData":
+            # all "location" points
+            locations = [v.Data[0].Value.Data for v in p.Value.Values]
+
+            distances = []
+            for j in range(0, len(locations) - 1):
+                distances.append(
+                    sqrt(
+                        (locations[j + 1].X - locations[j].X) ** 2
+                        + (locations[j + 1].Y - locations[j].Y) ** 2
+                        + (locations[j + 1].Z - locations[j].Z) ** 2
+                    )
+                )
+
+            return sum(distances)
+
+    return -inf
